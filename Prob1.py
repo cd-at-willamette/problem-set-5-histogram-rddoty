@@ -1,28 +1,53 @@
-from pgl import *
+#Reagan Doty
+
+from pgl import GWindow, GCompound, GRect
+
+n = 10
+sample = [3, 4, 3, 5, 1, 2, 4, 3, 6, 7, 6, 8, 9, 0, 6, 8, 9]
 
 #1a
-def create_histogram_array(data:list[int])->list[int]:
-    pass
+def create_histogram_array(n, samples):
+    """Returns a histogram array from samples with values in range(0, n)."""
+    counts_list = [0] * n
+    for i in range(len(samples)):
+        if samples[i] < n:
+            counts_list[samples[i]] += 1
+    return(counts_list)
 
 #1b
-def print_histogram(hist:list[int]) -> None:
-    pass
+def print_histogram(array):
+    """Prints a rotated histogram of array on the console."""
+    for i in range(len(array)):
+        line = ""
+        line = array[i] * "*"
+        print(line)
 
 #1c
-def graph_histogram(hist:list[int], width:int, height:int) -> None:
+def create_histogram_graph(array, width, height):
+    """Returns a GCompound that graphs the histogram array."""
+    graph = GCompound()
+    max_number = max(array)
+    for i in range(len(array)):
+        square = GRect(width/len(array), height / max_number * array[i])
+        square.set_fill_color("Pink")
+        square.set_filled(True)
+        graph.add(square, i* width/len(array), height-(height / max_number * array[i]))
+    return graph
 
-    def my_rect(x,y,w,h,color):
-        rect = GRect(x,y,w,h)
-        rect.set_filled(True)
-        rect.set_color(color)
-        gw.add(rect)
 
-    pass
+GWINDOW_WIDTH = 700
+GWINDOW_HEIGHT = 400
 
-# Some testing printouts for your use!
-PI_DIGITS = [3,1,4,1,5,9,2,6,5,3,5,5,8,9,7,9]
-hist = create_histogram_array(PI_DIGITS)
-print(hist)
-#print_histogram(hist) # uncomment to test
-#graph_histogram(hist, 400, 400) # uncomment to test
 
+def create_histogram_graph_test():
+    gw = GWindow(GWINDOW_WIDTH, GWINDOW_HEIGHT)
+    array = create_histogram_array(n, sample)
+    graph = create_histogram_graph(array, GWINDOW_WIDTH, GWINDOW_HEIGHT)
+    gw.add(graph)
+
+
+if __name__ == "__main__":
+    print(create_histogram_array(n, sample))
+    counts = create_histogram_array(n, sample)
+    print_histogram(counts)
+    create_histogram_graph_test()
